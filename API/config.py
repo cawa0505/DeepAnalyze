@@ -9,8 +9,8 @@ import os
 os.environ.setdefault("MPLBACKEND", "Agg")
 
 # API Configuration
-API_BASE = "http://localhost:8000/v1"  # vLLM API endpoint
-MODEL_PATH = "DeepAnalyze-8B"
+API_BASE = os.getenv('API_BASE', "http://localhost:8000/v1")  # LLM API endpoint
+MODEL_PATH = os.getenv('MODEL_PATH', "DeepAnalyze-8B")
 WORKSPACE_BASE_DIR = "workspace"
 HTTP_SERVER_PORT = 8100
 HTTP_SERVER_BASE = f"http://localhost:{HTTP_SERVER_PORT}"
@@ -27,15 +27,15 @@ CLEANUP_INTERVAL_MINUTES = 30
 
 # Code execution configuration
 CODE_EXECUTION_TIMEOUT = 120
-MAX_NEW_TOKENS = 32768
+MAX_NEW_TOKENS = 4096
 
 # File handling configuration
 FILE_STORAGE_DIR = os.path.join(WORKSPACE_BASE_DIR, "_files")
 VALID_FILE_PURPOSES = ["fine-tune", "answers", "file-extract", "assistants"]
 
 # Model configuration
-DEFAULT_TEMPERATURE = 0.4
-DEFAULT_MODEL = "DeepAnalyze-8B"
+DEFAULT_TEMPERATURE = float(os.getenv('DEFAULT_TEMPERATURE', '0.4'))
+DEFAULT_MODEL = os.getenv('DEFAULT_MODEL', "deepanalyze-8b")
 
 # Stop token IDs for DeepAnalyze model
 STOP_TOKEN_IDS = [151676, 151645]

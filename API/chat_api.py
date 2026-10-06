@@ -291,6 +291,7 @@ async def chat_completions(
                     messages=vllm_messages,
                     temperature=temperature,
                     stream=True,
+                    stop=["</Code>"],
                     extra_body={
                         "add_generation_prompt": False,
                         "stop_token_ids": STOP_TOKEN_IDS,
@@ -338,7 +339,9 @@ async def chat_completions(
                                     artifacts, workspace_dir, current_thread_id, generated_files
                                 )
                         assistant_reply += exe_str + file_block
-                        vllm_messages.append({"role": "execute", "content": exe_output})
+                        # Truncate execution output for model context to avoid exceeding ctx_size (8192)
+                        truncated_output = exe_output[:3000] + ("\n... (truncated)" if len(exe_output) > 3000 else "")
+                        vllm_messages.append({"role": "execute", "content": truncated_output})
                     else:
                         finished = True
 
